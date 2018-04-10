@@ -20,6 +20,7 @@ if action in ['d', 'D']:
     else:
         print("Error: Name of repository couldn't be determined automatically")
         name = input("Repository name: ")
+    app_name = input("Name of file to run: ")
     port = random.randint(3000,9000)
     subprocess.call("clear", shell=True)
     print("------------------------------------------")
@@ -27,6 +28,7 @@ if action in ['d', 'D']:
     print("Repository URL: %s" % repo_url)
     print("Repository name: %s" % name)
     print("Port chosen: %s" % port)
+    print("File name: %s" % app_name)
     print("------------------------------------------")
     confirm = input("Confirm (y/n) ")
     if confirm != "y":
@@ -35,7 +37,9 @@ if action in ['d', 'D']:
     subprocess.call("git clone %s ../%s -q" % (repo_url, name), shell=True)
     config.create_config(domain, port, name)
     subprocess.call("sudo certbot -d %s --nginx --redirect -n -q" % domain, shell=True)
-    config_db.insert({'domain': domain, 'port': port, 'folder': name})
+    config_db.insert({'domain': domain, 'port': port, 'folder': name, 'app_name': app_name})
+    time.sleep(4)
+    reboot_servers.reload()
     time.sleep(4)
     reboot_servers.reload()
     print("Done")
