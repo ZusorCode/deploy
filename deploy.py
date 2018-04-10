@@ -1,10 +1,10 @@
-import os
-if os.getuid() != 0:
+import os, sys
+"""if os.getuid() != 0:
     print("You need to run this script as root!")
     exit()
-
+"""
 import subprocess, random
-from tinydb import TinyDB
+from tinydb import TinyDB, Query
 import re
 from tools import config, reboot_servers
 config_db = TinyDB('config.json')
@@ -43,3 +43,27 @@ if action in ['d', 'D']:
     config_db.insert({'domain': domain, 'port': port, 'folder': name})
     print("Reloading server")
     reboot_servers.reload()
+elif action in ['r', 'R']:
+    for number, value in enumerate(config_db.all()):
+        print("%s) %s" % (number + 1, value['folder']))
+    selection = input("Select: ")
+
+    try:
+        selection = int(selection)
+    except ValueError:
+        print("Cancelled!")
+
+    selection -= 1
+    selected_folder = config_db.all()[selection]['folder']
+    print("You selected %s" % selected_folder)
+    confirm = input("Enter y to confirm: ")
+    if confirm != "y":
+        print("Cancelled")
+        exit()
+    search = Query()
+    config_db.remove(search.folder == selected_folder)
+    current_path = sys.path[0]
+    subprocess.call("sudo rm -rf %s/../%s" % (current_path, selected_folder), shell=True)
+    subprocess.call("sudo rm -rf /etc/nginx/sites-enabled/%s" % selected_folder, shelll=True)
+    reboot_servers.reload()
+    print("Removed successfully")
