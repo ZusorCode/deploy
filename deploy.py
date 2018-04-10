@@ -34,7 +34,7 @@ if action in ['d', 'D']:
         print("Fatal: No confirmation!")
         exit()
     print("Cloning repository")
-    subprocess.call("git clone %s -q" % url, shell=True)
+    subprocess.call("git clone %s -q" % repo_url, shell=True)
     config.create_config(domain, port)
     subprocess.call("sudo certbot -d %s --nginx --redirect -n -q" % domain, shell=True)
     reboot_servers.reload()
