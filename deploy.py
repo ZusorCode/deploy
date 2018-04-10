@@ -42,4 +42,4 @@ if action in ['d', 'D']:
     print("Reloading server")
     reboot_servers.reload()
     print("Adding to simple_deploy config")
-    config_db.insert({'doamin', domain, 'port': port, 'folder': name})
+    config_db.insert({'domain': domain, 'port': port, 'folder': name})
