@@ -1,5 +1,5 @@
-def create_config(domain, port):
-    with open('/etc/nginx/sites-enabled/%s' % repository, 'a+') as file:
+def create_config(domain, port, name):
+    with open('/etc/nginx/sites-enabled/%s' % name, 'a+') as file:
         file.write("""
 server {
     server_name %s;
