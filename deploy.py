@@ -38,7 +38,7 @@ if action in ['d', 'D']:
     print("Creating nginx config")
     config.create_config(domain, port, name)
     print("Getting certificate")
-    subprocess.call("sudo certbot -d %s --nginx --redirect -n -q" % domain, shell=True)
+    subprocess.call("sudo certbot -d %s --nginx --redirect -n " % domain, shell=True)
     print("Reloading server")
     reboot_servers.reload()
     print("Adding to simple_deploy config")
