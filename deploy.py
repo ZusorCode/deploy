@@ -64,6 +64,6 @@ elif action in ['r', 'R']:
     config_db.remove(search.folder == selected_folder)
     current_path = sys.path[0]
     subprocess.call("sudo rm -rf %s/../%s" % (current_path, selected_folder), shell=True)
-    subprocess.call("sudo rm -rf /etc/nginx/sites-enabled/%s" % selected_folder, shelll=True)
+    subprocess.call("sudo rm -rf /etc/nginx/sites-enabled/%s" % selected_folder, shell=True)
     reboot_servers.reload()
     print("Removed successfully")
