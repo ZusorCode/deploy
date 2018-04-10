@@ -41,3 +41,5 @@ if action in ['d', 'D']:
     subprocess.call("sudo certbot -d %s --nginx --redirect -n -q" % domain, shell=True)
     print("Reloading server")
     reboot_servers.reload()
+    print("Adding to simple_deploy config")
+    config_db.insert({'doamin', domain, 'port': port, 'folder': name})
