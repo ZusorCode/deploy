@@ -1,17 +1,16 @@
-import os, sys
-"""if os.getuid() != 0:
+import os
+if os.getuid() != 0:
     print("You need to run this script as root!")
     exit()
-"""
+
 import subprocess, random
 from tinydb import TinyDB, Query
 import re
 from tools import config, reboot_servers
+import time
+
 config_db = TinyDB('config.json')
 action = input("(d)eploy or (r)emove: ")
-if not action in ['d', 'r', 'D', 'R']:
-    print("Fatal: Unknown Command")
-    exit()
 if action in ['d', 'D']:
     domain = input("Domain name: ")
     repo_url = input("Repository URL: ")
@@ -33,16 +32,13 @@ if action in ['d', 'D']:
     if confirm != "y":
         print("Fatal: No confirmation!")
         exit()
-    print("Cloning repository")
     subprocess.call("git clone %s ../%s -q" % (repo_url, name), shell=True)
-    print("Creating nginx config")
     config.create_config(domain, port, name)
-    print("Getting certificate")
-    subprocess.call("sudo certbot -d %s --nginx --redirect -n " % domain, shell=True)
-    print("Adding to simple_deploy config")
+    subprocess.call("sudo certbot -d %s --nginx --redirect -n -q" % domain, shell=True)
     config_db.insert({'domain': domain, 'port': port, 'folder': name})
-    print("Reloading server")
+    time.sleep(4)
     reboot_servers.reload()
+    print("Done")
 elif action in ['r', 'R']:
     for number, value in enumerate(config_db.all()):
         print("%s) %s" % (number + 1, value['folder']))
@@ -51,7 +47,7 @@ elif action in ['r', 'R']:
     try:
         selection = int(selection)
     except ValueError:
-        print("Cancelled!")
+        exit()
 
     selection -= 1
     selected_folder = config_db.all()[selection]['folder']
@@ -65,5 +61,9 @@ elif action in ['r', 'R']:
     current_path = sys.path[0]
     subprocess.call("sudo rm -rf %s/../%s" % (current_path, selected_folder), shell=True)
     subprocess.call("sudo rm -rf /etc/nginx/sites-enabled/%s" % selected_folder, shell=True)
+    time.sleep(4)
     reboot_servers.reload()
-    print("Removed successfully")
+    print("Done")
+else:
+    print("Error")
+    exit()
