@@ -41,7 +41,7 @@ if action in ['d', 'D']:
     time.sleep(4)
     reboot_servers.reload()
     time.sleep(4)
-    reboot_servers.reload()
+    reboot_servers.reload()d
     print("Done")
 elif action in ['r', 'R']:
     for number, value in enumerate(config_db.all()):
