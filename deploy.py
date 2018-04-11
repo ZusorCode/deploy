@@ -1,4 +1,4 @@
-import os
+import os, sys
 if os.getuid() != 0:
     print("You need to run this script as root!")
     exit()
