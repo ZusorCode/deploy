@@ -6,7 +6,7 @@ if os.getuid() != 0:
 import subprocess, random
 from tinydb import TinyDB, Query
 import re
-from tools import config, reboot_servers
+import config, reboot_servers
 import time
 
 config_db = TinyDB('config.json')
