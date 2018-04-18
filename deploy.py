@@ -36,7 +36,7 @@ if action in ['d', 'D']:
         exit()
     subprocess.call("git clone %s ../%s -q" % (repo_url, name), shell=True)
     config.create_config(domain, port, name)
-    subprocess.call("sudo certbot -d %s --nginx --redirect -n -q" % domain, shell=True)
+    #subprocess.call("sudo certbot -d %s --nginx --redirect -n -q" % domain, shell=True)
     config_db.insert({'domain': domain, 'port': port, 'folder': name, 'app_name': app_name})
     time.sleep(4)
     reboot_servers.reload()
